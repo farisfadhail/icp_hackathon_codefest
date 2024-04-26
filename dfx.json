@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "icp_hackathon_codefest_backend": {
+      "main": "src/icp_hackathon_codefest_backend/main.mo",
+      "type": "motoko"
+    },
+    "icp_hackathon_codefest_frontend": {
+      "dependencies": [
+        "icp_hackathon_codefest_backend"
+      ],
+      "source": [
+        "src/icp_hackathon_codefest_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "icp_hackathon_codefest_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
