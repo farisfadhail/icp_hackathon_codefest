@@ -1,64 +1,101 @@
+
+import Principal "mo:base/Principal";
+import Result "mo:base/Result";
+import Types "types";
 import Time "mo:base/Time";
 import TrieMap "mo:base/TrieMap";
-import Result "mo:base/Result";
-import Principal "mo:base/Principal";
+import Iter "mo:base/Iter";
+import HashMap "mo:base/HashMap";
+import Nat64 "mo:base/Nat64";
+
+
 
 // The Database actor is responsible for managing the user data.
-actor Database {
-  public query func greet(name : Text) : async Text {
-    return "Hello, " # name # "!";
-  };
+actor {
 
-   // User type
-   type User = {
-      internet_identity : Principal;
-      first_name : Text;
-      last_name : Text;
-      email : Text;
-      birth_date : Text;
-      company_ids : [Text];
-      timestamp : Time.Time;
-   };
+   type User = Types.User;
+   type UserRequest = Types.UserRequest;
+   type Result<Ok, Err> = Types.Result<Ok, Err>;
+   type TrieMap<K, V> = Types.TrieMap<K, V>;
 
-    // TrieMap to store users, with Principal as the key and User as the value
    let users = TrieMap.TrieMap<Principal, User>(Principal.equal, Principal.hash);
 
+
     // Register a new user
-   public shared (msg) func register(first_name : Text, last_name : Text, email : Text, birth_date : Text) : async Result.Result<User, Text> {
+   public shared ({caller}) func register(newUser : UserRequest) : async Result.Result<User, Text> {
 
-      let user_id = msg.caller;
-
-      if (users.get(user_id) != null) {
+      if (users.get(caller) != null) {
          return #err("User already exists");
       };
 
+      let email = newUser.email;
       for (user in users.vals()) {
          if (user.email == email) {
             return #err("Email already exists");
          };
       };
+      
 
-      let user = {
-         internet_identity = user_id;
-         first_name = first_name;
-         last_name = last_name;
-         email = email;
-         birth_date = birth_date;
-         company_ids = [];
-         selected_company_id = null;
+      let user : User = {
+         email = newUser.email;
+         first_name = newUser.first_name;
+         last_name = newUser.last_name;
          timestamp = Time.now();
       };
+      
 
-      users.put(user.internet_identity, user);
+      users.put(caller, user);
 
       return #ok(user);
    };
 
     // Function to get a user by their principal
-   public query func getUser(principal : Principal) : async ?User {
+   public query ({caller}) func getUser() : async Result.Result<User, Text>{
 
-      return users.get(principal);
+      switch (users.get(caller)) {
+         case (null) {
+            return #err("User not found");
+         };
+         case  (?user) {
+            return #ok(user);
+         };
+      };
+      
    };
 
-   
+   public query func getAllUsers() : async [User] {
+      return Iter.toArray(users.vals());
+   };
+
+   type Company = Types.Company; 
+   type CompanyDetail = Types.CompanyDetail;
+   type CompanyId = Types.CompanyId;
+   let companies = HashMap.HashMap<CompanyId, Company>(0, Nat64.equal, Nat64.toNat32);
+   var company_id : Nat64 = 0;
+
+   public shared ({caller}) func createCompany(detail : CompanyDetail) : async Result.Result<CompanyId, Text> {
+      switch(users.get(caller)) {
+         case(null){
+            return #err("Not authorized");
+         };
+         case(?user){
+            let company : Company = {
+               id = company_id;
+               created = Time.now();
+               creator = caller;
+               holder = [];
+               detail;
+            };
+            companies.put(company_id, company);
+            company_id +=  1;
+            return #ok(company_id - 1);
+         };
+      };
+   };
+
+   public query func getCompany(id : CompanyId) : async ?Company {
+      return companies.get(id);
+   };
+
+
 };
