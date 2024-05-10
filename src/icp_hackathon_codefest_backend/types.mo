@@ -51,4 +51,20 @@ module {
         holder : [Holder];
         detail : CompanyDetail;
     };
+
+    public type CoinId = Nat64;
+    public type Coin = {
+        name : Text;
+        symbol : Text;
+        suply : Nat;
+        curent_suply : Nat;
+    };
+
+    public type CoinDetail = {
+        coin_id : CoinId;
+        value : Nat;
+    };
+    public type Wallet = {
+        detail : [CoinDetail];
+    };
 }
