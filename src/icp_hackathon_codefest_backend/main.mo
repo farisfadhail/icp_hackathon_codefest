@@ -10,6 +10,9 @@ import Nat64 "mo:base/Nat64";
 import Buffer "mo:base/Buffer";
 import Nat "mo:base/Nat";
 import Array "mo:base/Array";
+import Text "mo:base/Text";
+
+
 
 
 
@@ -23,26 +26,196 @@ actor {
    type Result<Ok, Err> = Types.Result<Ok, Err>;
    type TrieMap<K, V> = Types.TrieMap<K, V>;
    type Wallet = Types.Wallet;
-   type Coin = Types.Coin;
-   type CoinId = Types.CoinId;
-   type CoinDetail = Types.CoinDetail;
+   type Token = Types.Token;
+   type Ticker = Types.Ticker;
+   type TokenDetail = Types.TokenDetail;
+   type TokenListing = Types.TokenListing;
 
    let users = TrieMap.TrieMap<Principal, User>(Principal.equal, Principal.hash);
-   let coins = HashMap.HashMap<Nat64, Coin>(0, Nat64.equal, Nat64.toNat32);
-   var coin_id : Nat64 = 0;
-   //initialize coins
-   let coin : Coin = {
-      name = "Together Investment Coin";
-      symbol = "TIN";
-      suply = 12000000;
-      curent_suply = 12000000;
-   };
-   coins.put(coin_id, coin);
-   coin_id += 1;
-
+   let tokens = HashMap.HashMap<Principal, Token>(0,Principal.equal, Principal.hash);
    let wallets = HashMap.HashMap<Principal, Wallet>(0, Principal.equal, Principal.hash);
-   var count : Nat64 = 0;
 
+
+      //minus suplay
+   func _minSuply(caller : ?Principal,ticker : Ticker, value : Nat) : () {
+      switch(caller){
+         case (?caller){
+            let wallet = wallets.get(caller);
+            switch (wallet) {
+               case (null) {
+                  return;
+               };
+               case (?wallet) {
+                  let detail = Array.map<TokenDetail, TokenDetail>(wallet.detail, func (tokenDetail) {
+                     if (tokenDetail.ticker == ticker) {
+                        let newTokenDetail : TokenDetail = {
+                           ticker = tokenDetail.ticker;
+                           value = tokenDetail.value - value;
+                        };
+                        return newTokenDetail;
+                     } else {
+                        return tokenDetail;
+                     };
+                  });
+
+                  let newDetail = Buffer.fromArray<TokenDetail>(detail);
+                  let updateWallet : Wallet = {
+                     detail = Buffer.toArray(newDetail);
+                  };
+                  wallets.put(caller, updateWallet);
+                  
+               };
+            };
+         };
+         case (null){
+            return;
+         };
+      };
+   };
+
+   func _plusSuply(caller : ?Principal,ticker : Ticker, value : Nat) : () {
+      switch(caller){
+         case (?caller){
+            if (_cekWalletToken(caller, ticker)) {
+               let wallet = wallets.get(caller);
+               switch (wallet) {
+                  case (null) {
+                     return;
+                  };
+                  case (?wallet) {
+                     let detail = Array.map<TokenDetail, TokenDetail>(wallet.detail, func (tokenDetail) {
+                        if (tokenDetail.ticker == ticker) {
+                           let newTokenDetail : TokenDetail = {
+                              ticker = tokenDetail.ticker;
+                              value = tokenDetail.value + value;
+                           };
+                           return newTokenDetail;
+                        } else {
+                           return tokenDetail;
+                        };
+                     });
+
+                     let newDetail = Buffer.fromArray<TokenDetail>(detail);
+                     let updateWallet : Wallet = {
+                        detail = Buffer.toArray(newDetail);
+                     };
+                     wallets.put(caller, updateWallet);
+                     
+                  };
+               };
+            }else {
+               _addTokenToWallet(caller, ticker, value);
+            }
+         };
+         case (null){
+            return;
+         };
+      };
+   };
+
+   
+
+   func _cekWalletToken(caller : Principal, ticker : Ticker) : Bool {
+      switch (wallets.get(caller)) {
+         case (null) {
+            return false;
+         };
+         case (?wallet) {
+            let token = Array.find<TokenDetail>(wallet.detail, func (tokenDetail) {
+            tokenDetail.ticker == ticker;
+            });
+            return token != null;
+         };
+      };
+      
+   };
+
+   func _createToken (ticker : Ticker, value : Nat, name : Text, caller : Principal) : () {
+      let token : Token = {
+         name ;
+         ticker;
+         suply = value;
+      };
+
+      tokens.put(caller, token);
+
+      let token_detail : TokenDetail = {
+            ticker ;
+            value ;
+      };
+
+      switch(wallets.get(caller)) {
+         case (null) {
+            let addToken = Buffer.fromArray<TokenDetail>([token_detail]);
+            let wallet : Wallet = {
+               detail = Buffer.toArray(addToken);
+            };
+            wallets.put(caller, wallet);
+         };
+         case (?wallet) {
+            
+         };
+      };
+   };
+
+   func _addTokenToWallet(caller : Principal,ticker : Ticker, value : Nat) : (){
+      let tokenDetail : TokenDetail = {
+         ticker;
+         value;
+      };
+      switch(wallets.get(caller)) {
+         case (null) {
+            let addToken = Buffer.fromArray<TokenDetail>([tokenDetail]);
+            let wallet : Wallet = {
+               detail = Buffer.toArray(addToken);
+            };
+            wallets.put(caller, wallet);
+         };
+         case (?wallet) {
+            let currentToken = Buffer.fromArray<TokenDetail>(wallet.detail);
+            currentToken.add(tokenDetail);
+            let updateWallet : Wallet = {
+               detail = Buffer.toArray(currentToken);
+            };
+            wallets.put(caller, updateWallet);
+         };
+      };
+      
+   };
+
+
+   func _getTokenDetail(wallet : Wallet, ticker: Ticker) : ?TokenDetail {
+      let token = Array.find<TokenDetail>(wallet.detail, func (tokenDetail) {
+         tokenDetail.ticker == ticker;
+      });
+      return token;
+   };
+
+   //initialize coins
+   let tin_ticker = "TIN";
+   
+   var dev_claim = false;
+   var dev : ?Principal = null;
+
+   public shared func claimDev(caller : Principal) : async Result.Result<Text, Text> {
+      if (dev_claim == false) {
+         dev_claim := true;
+         dev := ?caller;
+         switch(dev){
+            case(?dev){
+               _createToken("TIN", 100000000, "Tin Coin",dev);
+               return #ok("Dev claim successful");
+            };
+            case(null){
+               return #err("Dev claim failed");
+            };
+         };
+      } else {
+         return #err("Dev claim already claimed");
+      };
+   };
+
+   var count : Nat64 = 0;
     // Register a new user
    public shared ({caller}) func register(newUser : UserRequest) : async Result.Result<User, Text> {
 
@@ -68,22 +241,10 @@ actor {
 
       users.put(caller, user);
 
-      if (count <= 100){
+      if (count <= 100000){
          
-         let coin_detail : CoinDetail = {
-            coin_id = 0;
-            value = 10;
-         };
-
-         
-
-         let newCoin = Buffer.fromArray<CoinDetail>([coin_detail]);
-         let wallet : Wallet = {
-            detail = Buffer.toArray(newCoin);
-         };
-
-         _minSuply(0,10);
-         wallets.put(caller, wallet);
+         _addTokenToWallet(caller, tin_ticker, 15);
+         _minSuply(dev,tin_ticker,15);
          
          count += 1;
       };
@@ -91,46 +252,11 @@ actor {
       return #ok(user);
    };
 
-   func _minSuply(id : CoinId, value : Nat) : () {
-      switch(coins.get(id)) {
-         case (?coin) {
-            let coinUpdate : Coin = {
-               name = coin.name;
-               symbol = coin.symbol;
-               suply = coin.suply;
-               curent_suply = coin.curent_suply - value;
-            };
-
-            coins.put(id, coinUpdate);
-         };
-         case (null) {
-            return;
-         };
-      };
-   };
-
-   func _plsuSuply(id : CoinId, value : Nat) : () {
-      switch(coins.get(id)) {
-         case (?coin) {
-            let coinUpdate : Coin = {
-               name = coin.name;
-               symbol = coin.symbol;
-               suply = coin.suply;
-               curent_suply = coin.curent_suply + value;
-            };
-
-            coins.put(id, coinUpdate);
-         };
-         case (null) {
-            return;
-         };
-      };
-   };
+   
 
 
     // Function to get a user by their principal
-   public query ({caller}) func getUser() : async Result.Result<User, Text>{
-
+   public query func getUser(caller : Principal) : async Result.Result<User, Text>{
       switch (users.get(caller)) {
          case (null) {
             return #err("User not found");
@@ -142,17 +268,22 @@ actor {
       
    };
 
+   // Function to get all users
    public query func getAllUsers() : async [User] {
       return Iter.toArray(users.vals());
    };
 
+
+
    type Company = Types.Company; 
    type CompanyDetail = Types.CompanyDetail;
    type CompanyId = Types.CompanyId;
+
    let companies = HashMap.HashMap<CompanyId, Company>(0, Nat64.equal, Nat64.toNat32);
    var company_id : Nat64 = 0;
 
-   public shared ({caller}) func createCompany(detail : CompanyDetail) : async Result.Result<CompanyId, Text> {
+   //fucntion to create company
+   public shared func createCompany(caller : Principal,detail : CompanyDetail, token : Token) : async Result.Result<CompanyId, Text> {
       switch(users.get(caller)) {
          case(null){
             return #err("Not authorized");
@@ -162,45 +293,112 @@ actor {
                id = company_id;
                created = Time.now();
                creator = caller;
-               holder = [];
                detail;
+               token;
             };
             
             companies.put(company_id, company);
-            _plsuSuply(0,2);
+            _minSuply(?caller,tin_ticker,5);
+            _plusSuply(dev,tin_ticker,5);
+
+            tokens.put(caller, token);
+
+            _plusSuply(?caller, token.ticker, token.suply);
+
             company_id +=  1;
             return #ok(company_id - 1);
          };
       };
    };
-   
 
+
+   
+   //fuction to get company by ID
    public query func getCompany(id : CompanyId) : async ?Company {
       return companies.get(id);
    };
 
-   public query ({caller})  func getWallet() : async ?Wallet {
-      return wallets.get(caller);
+   let listings = HashMap.HashMap<Ticker, TokenListing>(0, Text.equal, Text.hash);
+
+   public shared func listingToken(caller : Principal, ticker : Ticker, suplay : Nat, liquidity : Nat) : (){
+      let callerTokenValue = _getBalance(caller,ticker);
+      if (callerTokenValue <= suplay) {
+         return;
+      };
+      let callerTinValue = _getBalance(caller,tin_ticker);
+      if (liquidity > callerTinValue) {
+         return;
+      };
+      let listing : TokenListing = {
+         ticker;
+         creator = caller;
+         suplay;
+         liquidity = liquidity;
+      };
+
+      _minSuply(?caller,ticker,suplay);
+      _minSuply(?caller,tin_ticker,liquidity);
+      listings.put(ticker, listing);
    };
 
-   public query func getCoin(id : Nat64) : async ?Coin {
-      return coins.get(id);
+   public query func getAllListings() : async [TokenListing] {
+      return Iter.toArray(listings.vals());
    };
 
-   func _getCoinDetail(wallet : Wallet, id: CoinId) : ?CoinDetail {
-      let coin = Array.find<CoinDetail>(wallet.detail, func (coinDetail) {
-         coinDetail.coin_id == id
-      });
+   public query func getListing(ticker : Ticker) : async ?TokenListing {
+      return listings.get(ticker);
+   };
+
+   public shared func buyToken(caller : Principal, ticker : Ticker, value : Nat) : async Result.Result<Text, Text> {
+      switch(listings.get(ticker)) {
+         case(null){
+            return #err("Token not listed");
+         };
+         case(?listing){
+            let price = listing.liquidity / listing.suplay;
+            let totalToken = value/price;
+            if (listing.suplay >= value) {
+               _plusSuply(?caller, ticker, totalToken);
+               _minSuply(?caller, tin_ticker, value);
+               
+               let updateListing : TokenListing = {
+                  ticker;
+                  creator = listing.creator;
+                  suplay = listing.suplay - value;
+                  liquidity = listing.liquidity + value;
+               };
+               listings.put(ticker, updateListing);
+               return #ok("Transaction successful");
+            } else {
+               return #err("Invalid value");
+            };
+         };
+      };
    };
 
 
-   public query ({caller}) func getBalance(id : CoinId) : async Result.Result<Nat, Text> {
+   public func getTokenPrice (ticker : Ticker) : async Result.Result<Nat, Text> {
+      switch(listings.get(ticker)) {
+         case(null){
+            return #err("Token not listed");
+         };
+         case(?listing){
+            let price = listing.liquidity / listing.suplay;
+            return #ok(price);
+         };
+      };
+   };
+
+
+
+
+   public query func getBalance(caller : Principal,ticker : Ticker) : async Result.Result<Nat, Text> {
       switch(wallets.get(caller)) {
          case(null){
             return #err("Wallet not found");
          };
          case(?wallet){
-            switch(_getCoinDetail(wallet, id)) {
+            switch(_getTokenDetail(wallet, ticker)) {
                case(null){
                   return #err("Coin not found");
                };
@@ -212,8 +410,37 @@ actor {
       };
    };
 
-
-   public shared (msg) func whoami() : async Principal {
-      msg.caller
+   func _getBalance(caller : Principal,ticker : Ticker) : Nat {
+      switch(wallets.get(caller)) {
+         case(null){
+            return 0;
+         };
+         case(?wallet){
+            switch(_getTokenDetail(wallet, ticker)) {
+               case(null){
+                  return 0;
+               };
+               case(?coinDetail){
+                  return coinDetail.value;
+               };
+            };
+         };
+      };
    };
+
+
+   public shared ({caller}) func whoami() : async Principal {
+      caller
+   };
+
+
+
+
+
+
+   public query  func getWallet(caller : Principal) : async ?Wallet {
+      return wallets.get(caller);
+   };
+
+   
 };

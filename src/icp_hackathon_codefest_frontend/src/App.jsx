@@ -16,7 +16,7 @@ function App() {
 		const first_name = event.target.elements.first_name.value;
 		const last_name = event.target.elements.last_name.value;
 		const email = event.target.elements.email.value;
-		icp_hackathon_codefest_backend.register({ first_name: first_name, last_name: last_name, email: email }).then((user) => {
+		actor.register({ first_name: first_name, last_name: last_name, email: email }).then((user) => {
 			if (user.err) {
 				setUser(user.err);
 			} else {
@@ -36,22 +36,23 @@ function App() {
 			});
 		});
 		const identity = authClient.getIdentity();
+		console.log("identity :", identity);
 		const agent = new HttpAgent({ identity });
+		console.log("agent :", agent);
 		setActor(
 			createActor(process.env.CANISTER_ID_ICP_HACKATHON_CODEFEST_BACKEND, {
 				agent,
 			})
 		);
-		const result = await actor
-			.makeSomeCallLikeHelloWorldOrCRUDOrMintOrSendBtcEtc()
-			// Update the ui accordingly...
-			.updateUi(result);
+		// const result = await actor.makeSomeCallLikeHelloWorldOrCRUDOrMintOrSendBtcEtc()
+		// 	// Update the ui accordingly...
+		// 	.updateUi(result);
 		return false;
 	}
 
 	async function whoAmI(event) {
 		event.preventDefault();
-		const principal = await icp_hackathon_codefest_backend.whoami();
+		const principal = await actor.whoami();
 
 		setPrincipal(principal.toString());
 		console.log("from principal :", principal.toString());
