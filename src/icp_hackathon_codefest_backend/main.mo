@@ -283,7 +283,7 @@ actor {
    var company_id : Nat64 = 0;
 
    //fucntion to create company
-   public shared func createCompany(caller : Principal,detail : CompanyDetail, token : Token) : async Result.Result<CompanyId, Text> {
+   public shared ({caller}) func createCompany(detail : CompanyDetail, token : Token) : async Result.Result<CompanyId, Text> {
       switch(users.get(caller)) {
          case(null){
             return #err("Not authorized");
@@ -320,7 +320,7 @@ actor {
 
    let listings = HashMap.HashMap<Ticker, TokenListing>(0, Text.equal, Text.hash);
 
-   public shared func listingToken(caller : Principal, ticker : Ticker, suplay : Nat, liquidity : Nat) : (){
+   public shared ({caller}) func listingToken( ticker : Ticker, suplay : Nat, liquidity : Nat) : (){
       let callerTokenValue = _getBalance(caller,ticker);
       if (callerTokenValue <= suplay) {
          return;
@@ -438,7 +438,7 @@ actor {
 
 
 
-   public query  func getWallet(caller : Principal) : async ?Wallet {
+   public query ({caller}) func getWallet() : async ?Wallet {
       return wallets.get(caller);
    };
 

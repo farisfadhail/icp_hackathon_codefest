@@ -7,6 +7,9 @@ function App() {
 	const [user, setUser] = useState();
 	const [getPrincipal, setPrincipal] = useState("");
 	const [actor, setActor] = useState(icp_hackathon_codefest_backend);
+	const [wallet, setWallet] = useState();  
+	const [listing, setListing] = useState();
+	const [company, setCompany] = useState();
 
 	console.log(process.env.CANISTER_ID_INTERNET_IDENTITY);
 	console.log(process.env.CANISTER_ID_ICP_HACKATHON_CODEFEST_BACKEND);
@@ -23,6 +26,33 @@ function App() {
 				setUser("User registered successfully!");
 			}
 		});
+		return false;
+	}
+
+	function registerCompany(event) {
+		event.preventDefault();
+		const name = event.target.elements.name.value;
+		const city = event.target.elements.city.value;
+		const nation = event.target.elements.nation.value;
+		const description = event.target.elements.description.value;
+		const token_name = event.target.elements.token_name.value;
+		const token_symbol = event.target.elements.token_symbol.value;
+		const token_supply = event.target.elements.token_supply.value;
+		actor.registerCompany({ name: name, city: city, nation: nation, description: description, name: token_name, ticker: token_symbol, suply: token_supply }).then((company) => {
+			if (company.err) {
+				setCompany(company.err);
+			} else {
+				setCompany("Company registered successfully!");
+			}
+		});
+		return false;
+	}
+
+	async function getWallet(event) {
+		event.preventDefault();
+		const wallet = await actor.getWallet();
+		setWallet(wallet);
+		console.log("from wallet :", wallet);
 		return false;
 	}
 
@@ -59,10 +89,38 @@ function App() {
 		return false;
 	}
 
+	async function getListing(event) {
+		event.preventDefault();
+		const listing = await actor.getListing();
+		setListing(listing);
+		console.log("from listing :", listing);
+		return false;
+	}
+
 	return (
 		<main>
 			<img src="/logo2.svg" alt="DFINITY logo" />
 			<br />
+			<br />
+			<form action="#" onSubmit={handleSubmit}>
+				<label htmlFor="name">Company name: &nbsp;</label>
+				<input id="name" alt="name" type="text" />
+				<label htmlFor="city">City company: &nbsp;</label>
+				<input id="city" alt="city" type="text" />
+				<label htmlFor="nation">Nation : &nbsp;</label>
+				<input id="nation" alt="nation" type="text" />
+				<label htmlFor="description">Deskripsi : &nbsp;</label>
+				<input id="description" alt="description" type="text" />
+				<label htmlFor="token_name">Token name : &nbsp;</label>
+				<input id="token_name" alt="token_name" type="text" />
+				<label htmlFor="token_symbol">Token symbol : &nbsp;</label>
+				<input id="token_symbol" alt="token_symbol" type="text" />
+				<label htmlFor="token_supply">Token supply : &nbsp;</label>
+				<input id="token_supply" alt="token_supply" type="text" />
+				
+				<button type="submit">Submit</button>
+			</form>
+			<section id="user">{company}</section>
 			<br />
 			<form action="#" onSubmit={handleSubmit}>
 				<label htmlFor="name">Enter your first name: &nbsp;</label>
@@ -75,7 +133,6 @@ function App() {
 			</form>
 			<section id="user">{user}</section>
 			<br />
-			<br />
 			<form>
 				<button onClick={login}>Login!</button>
 			</form>
@@ -87,6 +144,18 @@ function App() {
 				</button>
 			</form>
 			<section>1. {getPrincipal}</section>
+			<form>
+				<button id="getWallet" onClick={getWallet}>
+					get Wallet
+				</button>
+			</form>
+			<pre>{JSON.stringify(wallet, null, 2)}</pre>
+			<form>
+				<button id="getListing" onClick={getListing}>
+					get Wallet
+				</button>
+			</form>
+			<pre>{JSON.stringify(listing, null, 2)}</pre>
 		</main>
 	);
 }
