@@ -1,0 +1,31 @@
+import AppLogo from "../atoms/AppLogo";
+
+const Sidebar = () => {
+  return (
+    <aside className="w-72 h-screen p-6 fixed">
+      <div className="bg-indigo-900 bg-opacity-80 w-full h-full rounded-lg p-4 space-y-8">
+        <div className="w-fit mx-auto">
+          <AppLogo />
+        </div>
+        <div className="overflow-y-auto h-4/5">
+          <ul className="space-y-3">
+            <li className="flex gap-3 items-center text-white font-semibold text-xl py-1.5 px-6 border-2 border-indigo-700 hover:bg-indigo-700 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-7" viewBox="0 0 16 16">
+                <path fill="currentColor" d="M7.5 1a7.5 7.5 0 1 0 0 15a7.5 7.5 0 0 0 0-15m0 13.5a6 6 0 1 1 0-12a6 6 0 0 1 0 12M8 8V6h2V5H8V4H7v1H5v4h2v2H5v1h2v1h1v-1h2V8zM7 8H6V6h1zm2 3H8V9h1z" />
+              </svg>
+              Coin
+            </li>
+            <li className="flex gap-3 items-center text-white font-semibold text-xl py-1.5 px-6 border-2 border-indigo-700 hover:bg-indigo-700 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-7" viewBox="0 0 16 16">
+                <path fill="currentColor" d="M7.5 1a7.5 7.5 0 1 0 0 15a7.5 7.5 0 0 0 0-15m0 13.5a6 6 0 1 1 0-12a6 6 0 0 1 0 12M8 8V6h2V5H8V4H7v1H5v4h2v2H5v1h2v1h1v-1h2V8zM7 8H6V6h1zm2 3H8V9h1z" />
+              </svg>
+              Coin
+            </li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  );
+};
+
+export default Sidebar;
