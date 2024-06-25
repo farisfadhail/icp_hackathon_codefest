@@ -3,6 +3,7 @@ import DataTable from "react-data-table-component";
 import Title from "../../Components/atoms/Title";
 import AuthLayout from "../../Layouts/AuthLayout";
 import PrimaryButton from "../../Components/atoms/PrimaryButton";
+import PrimaryLink from "../../Components/atoms/PrimaryLink";
 
 const columns = [
   {
@@ -17,7 +18,7 @@ const columns = [
   },
   {
     name: "Aksi",
-    cell: (row) => <PrimaryButton text="Detail" />,
+    cell: (row) => <PrimaryLink link="/token/swap" text="Exchange" />,
     width: "11rem",
   },
 ];
@@ -62,7 +63,7 @@ const customStyles = {
 const TokenIndex = () => {
   return (
     <AuthLayout>
-      <article className="h-screen">
+      <article className="min-h-screen">
         <Title>
           All <span className="text-yellow-500">Tokens</span>
         </Title>

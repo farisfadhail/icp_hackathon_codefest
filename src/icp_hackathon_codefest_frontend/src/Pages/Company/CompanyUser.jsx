@@ -2,6 +2,8 @@ import PrimaryButton from "../../Components/atoms/PrimaryButton";
 import PrimaryLink from "../../Components/atoms/PrimaryLink";
 import SecondaryButton from "../../Components/atoms/SecondaryButton";
 import Title from "../../Components/atoms/Title";
+import CompanyInfo from "../../Components/atoms/company/CompanyInfo";
+import CompanyDescription from "../../Components/atoms/company/CompanyDescription";
 import AuthLayout from "../../Layouts/AuthLayout";
 import DataTable from "react-data-table-component";
 
@@ -69,36 +71,19 @@ const CompanyUser = () => {
             Company <span className="text-yellow-500">Detail</span>
           </Title>
           <img src="/assets/building-asset.svg" className="w-72 mx-auto absolute top-20 inset-x-0 -z-[1]" />
-          <div className="rounded-md p-6 bg-indigo-900 w-3/5 mx-auto space-y-6 mt-60 border-2 border-indigo-700">
-            <div className="text-center">
-              <p className="text-yellow-500 font-semibold text-2xl">Company Name</p>
-              <p className="text-4xl text-white">Galaxy Store</p>
-            </div>
-            <div className="text-center">
-              <p className="text-yellow-500 font-semibold text-2xl">Company City</p>
-              <p className="text-4xl text-white">Galaxy Store</p>
-            </div>
-            <div className="text-center">
-              <p className="text-yellow-500 font-semibold text-2xl">Company Nation</p>
-              <p className="text-4xl text-white">Galaxy Store</p>
-            </div>
-          </div>
+          {/* Company Info Value Here */}
+          <CompanyInfo name="Galaxy Store" city="Surabaya" nation="Indonesia" />
         </div>
-        <div className="my-12">
-          <p className="text-yellow-500 font-semibold text-3xl text-center">About Company</p>
-          <p className="text-center text-white text-xl w-4/5 mx-auto">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem fugit, veniam fugiat ex commodi a odit deleniti possimus quasi dolore praesentium ducimus rerum, ratione maxime molestiae repudiandae tenetur dolorem totam delectus
-            quam natus exercitationem. Debitis delectus commodi cum labore illo.
-          </p>
-        </div>
+        {/* Company Description Value Here */}
+        <CompanyDescription description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem fugit, veniam fugiat ex commodi a odit deleniti possimus quasi dolore praesentium ducimus rerum, ratione maxime molestiae repudiandae tenetur dolorem totam delectus quam natus exercitationem. Debitis delectus commodi cum labore illo." />
       </article>
-      <article className="h-screen">
+      <article className="min-h-screen">
         <Title>
           All <span className="text-yellow-500">Listing</span>
         </Title>
         <div className="my-12 space-y-4">
           <div className="flex justify-end">
-            <PrimaryLink link="" text="Add Listing" />
+            <PrimaryLink link="/listing/create" text="Add Listing" />
           </div>
           <div className="rounded-xl border-2 border-indigo-700">
             <DataTable columns={columns} data={data} customStyles={customStyles} />

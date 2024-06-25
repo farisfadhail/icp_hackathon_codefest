@@ -5,7 +5,7 @@ import InputText from "../Components/atoms/InputText";
 
 const Register = () => {
   return (
-    <section className="w-screen h-screen flex justify-center items-center">
+    <section className="w-screen min-h-screen flex justify-center items-center">
       <div class="blob"></div>
       <div class="blob-2"></div>
       <div className="p-6 rounded-md bg-indigo-900 bg-opacity-60 border-2 border-indigo-700 space-y-6 w-96">

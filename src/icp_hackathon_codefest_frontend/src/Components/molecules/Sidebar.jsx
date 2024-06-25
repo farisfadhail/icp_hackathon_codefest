@@ -5,7 +5,7 @@ import SidebarLink from "../atoms/SidebarLink";
 const Sidebar = () => {
   return (
     <aside className="w-72 h-screen p-6 fixed">
-      <div className="bg-indigo-900 bg-opacity-80 w-full h-full rounded-lg p-4 space-y-8">
+      <div className="bg-indigo-900 bg-opacity-80 w-full h-full rounded-lg px-4 py-8 space-y-8">
         <div className="w-fit mx-auto">
           <AppLogo />
         </div>

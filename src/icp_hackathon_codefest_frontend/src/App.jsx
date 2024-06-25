@@ -6,6 +6,9 @@ import CompanyShow from "./Pages/Company/CompanyShow";
 import CompanyUser from "./Pages/Company/CompanyUser";
 import TokenIndex from "./Pages/Token/TokenIndex";
 import WalletIndex from "./Pages/Wallet/WalletIndex";
+import CompanyCreate from "./Pages/Company/CompanyCreate";
+import ListingCreate from "./Pages/Listing/ListingCreate";
+import TokenSwap from "./Pages/Token/TokenSwap";
 
 function App() {
   return (
@@ -14,9 +17,19 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/register" element={<Register />} />
+
+          {/* Company Route */}
           <Route path="/company" element={<CompanyIndex />} />
+          <Route path="/company/create" element={<CompanyCreate />} />
           <Route path="/company/user" element={<CompanyUser />} />
+
+          {/* Listing Route */}
+          <Route path="/listing/create" element={<ListingCreate />} />
+
+          {/* Token Route */}
           <Route path="/token" element={<TokenIndex />} />
+          <Route path="/token/swap" element={<TokenSwap />} />
+
           <Route path="/wallet" element={<WalletIndex />} />
         </Routes>
       </Router>

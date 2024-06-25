@@ -63,7 +63,7 @@ const customStyles = {
 const CompanyShow = () => {
   return (
     <AuthLayout>
-      <article className="h-screen">
+      <article className="min-h-screen">
         <Title>
           All <span className="text-yellow-500">Listing</span>
         </Title>

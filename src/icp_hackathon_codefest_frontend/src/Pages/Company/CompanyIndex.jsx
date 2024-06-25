@@ -63,13 +63,13 @@ const customStyles = {
 const CompanyIndex = () => {
   return (
     <AuthLayout>
-      <article className="h-screen">
+      <article className="min-h-screen">
         <Title>
           All <span className="text-yellow-500">Companies</span>
         </Title>
         <div className="my-12 space-y-4">
           <div className="flex justify-end gap-4">
-            <PrimaryLink link="/company/user" text="Add Company" />
+            <PrimaryLink link="/company/create" text="Add Company" />
             <PrimaryLink link="/company/user" text="Your Company" />
           </div>
           <div className="rounded-xl border-2 border-indigo-700">

@@ -74,7 +74,7 @@ const Landing = () => {
           </div> */}
         </div>
       </article>
-      <article id="work" className="h-screen flex items-center">
+      <article id="work" className="min-h-screen flex items-center">
         <div>
           <Title>
             How It <span className="text-yellow-500">Works</span>
