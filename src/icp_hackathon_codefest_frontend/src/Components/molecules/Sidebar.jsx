@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import AppLogo from "../atoms/AppLogo";
+import SidebarLink from "../atoms/SidebarLink";
 
 const Sidebar = () => {
   return (
@@ -7,20 +9,23 @@ const Sidebar = () => {
         <div className="w-fit mx-auto">
           <AppLogo />
         </div>
-        <div className="overflow-y-auto h-4/5">
+        <div className="h-fit">
           <ul className="space-y-3">
-            <li className="flex gap-3 items-center text-white font-semibold text-xl py-1.5 px-6 border-2 border-indigo-700 hover:bg-indigo-700 rounded-full">
+            <SidebarLink link="/company" text="Company">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-7" viewBox="0 0 16 16">
                 <path fill="currentColor" d="M7.5 1a7.5 7.5 0 1 0 0 15a7.5 7.5 0 0 0 0-15m0 13.5a6 6 0 1 1 0-12a6 6 0 0 1 0 12M8 8V6h2V5H8V4H7v1H5v4h2v2H5v1h2v1h1v-1h2V8zM7 8H6V6h1zm2 3H8V9h1z" />
               </svg>
-              Coin
-            </li>
-            <li className="flex gap-3 items-center text-white font-semibold text-xl py-1.5 px-6 border-2 border-indigo-700 hover:bg-indigo-700 rounded-full">
+            </SidebarLink>
+            <SidebarLink link="/token" text="Token">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-7" viewBox="0 0 16 16">
                 <path fill="currentColor" d="M7.5 1a7.5 7.5 0 1 0 0 15a7.5 7.5 0 0 0 0-15m0 13.5a6 6 0 1 1 0-12a6 6 0 0 1 0 12M8 8V6h2V5H8V4H7v1H5v4h2v2H5v1h2v1h1v-1h2V8zM7 8H6V6h1zm2 3H8V9h1z" />
               </svg>
-              Coin
-            </li>
+            </SidebarLink>
+            <SidebarLink link="/wallet" text="Wallet">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-7" viewBox="0 0 16 16">
+                <path fill="currentColor" d="M7.5 1a7.5 7.5 0 1 0 0 15a7.5 7.5 0 0 0 0-15m0 13.5a6 6 0 1 1 0-12a6 6 0 0 1 0 12M8 8V6h2V5H8V4H7v1H5v4h2v2H5v1h2v1h1v-1h2V8zM7 8H6V6h1zm2 3H8V9h1z" />
+              </svg>
+            </SidebarLink>
           </ul>
         </div>
       </div>

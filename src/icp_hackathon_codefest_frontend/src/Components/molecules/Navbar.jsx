@@ -16,7 +16,7 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="flex items-center gap-4">
-        <SecondaryLink link="/register" text="REGISTER" />
+        {/* <SecondaryLink link="/register" text="REGISTER" /> */}
         <PrimaryButton type="submit" text="LOGIN" />
       </div>
     </nav>

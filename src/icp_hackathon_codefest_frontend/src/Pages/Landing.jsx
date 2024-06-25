@@ -1,3 +1,4 @@
+import Title from "../Components/atoms/Title";
 import MainLayout from "../Layouts/MainLayout";
 
 const Landing = () => {
@@ -19,9 +20,9 @@ const Landing = () => {
       </article>
       <article id="about" className="min-h-screen flex items-center">
         <div>
-          <h1 className="pl-8 border-l-8 border-white font-bold text-5xl text-white">
+          <Title>
             What Is Join<span className="text-yellow-500">Vest</span>
-          </h1>
+          </Title>
           <div className="my-12 w-5/6 mx-auto">
             <div>
               <p className="text-white text-2xl text-center">
@@ -75,9 +76,9 @@ const Landing = () => {
       </article>
       <article id="work" className="h-screen flex items-center">
         <div>
-          <h1 className="pl-8 border-l-8 border-white font-bold text-5xl text-white">
+          <Title>
             How It <span className="text-yellow-500">Works</span>
-          </h1>
+          </Title>
           <div className="grid grid-cols-2 w-4/5 mx-auto gap-8 my-12">
             {/* Card 1 */}
             <div className="rounded-md p-6 bg-indigo-900 bg-opacity-80 border-2 border-indigo-700 flex gap-6 items-center">

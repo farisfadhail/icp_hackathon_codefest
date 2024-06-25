@@ -13,7 +13,7 @@ const Register = () => {
         <div className="w-fit mx-auto">
           <AppLogo />
         </div>
-        <p className="text-white text-center font-semibold text-xl">Register</p>
+        <p className="text-white text-center font-semibold text-xl">Complete Your Personal Data</p>
         <form className="flex flex-col space-y-6">
           <InputText id="first_name" name="first_name" placeholder="First Name" />
           <InputText id="last_name" name="last_name" placeholder="Last Name" />

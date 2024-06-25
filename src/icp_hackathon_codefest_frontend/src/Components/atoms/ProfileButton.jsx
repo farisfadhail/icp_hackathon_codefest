@@ -9,7 +9,7 @@ const ProfileButton = () => {
   };
 
   return (
-    <div className="relative rounded-md bg-indigo-700 py-1.5 px-3">
+    <div className="relative rounded-md bg-indigo-700 py-1.5 px-3 z-10">
       <button type="button" onClick={handleOpenMenu} className="flex items-center hover:text-gold-700 text-white">
         <svg xmlns="http://www.w3.org/2000/svg" className="w-8" viewBox="0 0 256 256">
           <path

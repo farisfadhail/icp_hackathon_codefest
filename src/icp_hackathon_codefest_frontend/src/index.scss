@@ -41,7 +41,7 @@ body {
   transform: translate(-50%, -50%);
   animation: moveBlob 20s infinite alternate ease-in-out;
   z-index: -1;
-  filter: blur(30px);
+  filter: blur(50px);
   transition: all 450ms ease-out;
 }
 
@@ -56,7 +56,7 @@ body {
   transform: translate(-50%, -50%);
   animation: moveBlob-2 30s infinite alternate ease-in-out;
   z-index: -1;
-  filter: blur(30px);
+  filter: blur(50px);
   transition: all 450ms ease-out;
 }
 
@@ -131,40 +131,3 @@ body {
     transform: scale(1.6) translate(-140%, 60%);
   }
 }
-// body {
-//   font-family: sans-serif;
-//   font-size: 1.5rem;
-// }
-
-// img {
-//   max-width: 50vw;
-//   max-height: 25vw;
-//   display: block;
-//   margin: auto;
-// }
-
-// form {
-//   display: flex;
-//   justify-content: center;
-//   gap: 0.5em;
-//   flex-flow: row wrap;
-//   max-width: 40vw;
-//   margin: auto;
-//   align-items: baseline;
-// }
-
-// button[type="submit"] {
-//   padding: 5px 20px;
-//   margin: 10px auto;
-//   float: right;
-// }
-
-// #greeting {
-//   margin: 10px auto;
-//   padding: 10px 60px;
-//   border: 1px solid #222;
-// }
-
-// #greeting:empty {
-//   display: none;
-// }

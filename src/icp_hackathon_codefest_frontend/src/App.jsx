@@ -1,7 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Landing from "./Pages/Landing";
 import Register from "./Pages/Register";
-import Dashboard from "./Pages/Dashboard";
+import CompanyIndex from "./Pages/Company/CompanyIndex";
+import CompanyShow from "./Pages/Company/CompanyShow";
+import CompanyUser from "./Pages/Company/CompanyUser";
+import TokenIndex from "./Pages/Token/TokenIndex";
+import WalletIndex from "./Pages/Wallet/WalletIndex";
 
 function App() {
   return (
@@ -10,7 +14,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/company" element={<CompanyIndex />} />
+          <Route path="/company/user" element={<CompanyUser />} />
+          <Route path="/token" element={<TokenIndex />} />
+          <Route path="/wallet" element={<WalletIndex />} />
         </Routes>
       </Router>
     </div>
