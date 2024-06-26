@@ -4,6 +4,7 @@ import Register from "./Pages/Register";
 import CompanyIndex from "./Pages/Company/CompanyIndex";
 import CompanyShow from "./Pages/Company/CompanyShow";
 import CompanyUser from "./Pages/Company/CompanyUser";
+import CompanyDetail from "./Pages/Company/CompanyDetail";
 import TokenIndex from "./Pages/Token/TokenIndex";
 import WalletIndex from "./Pages/Wallet/WalletIndex";
 import CompanyCreate from "./Pages/Company/CompanyCreate";
@@ -20,8 +21,10 @@ function App() {
 
           {/* Company Route */}
           <Route path="/company" element={<CompanyIndex />} />
+          <Route path="/company/:id" element={<CompanyShow />} />
           <Route path="/company/create" element={<CompanyCreate />} />
           <Route path="/company/user" element={<CompanyUser />} />
+          <Route path="/company/user/:id" element={<CompanyDetail />} />
 
           {/* Listing Route */}
           <Route path="/listing/create" element={<ListingCreate />} />
