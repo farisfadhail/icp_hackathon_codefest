@@ -434,13 +434,58 @@ actor {
    };
 
 
-
+   public query ({caller}) func cekUser() : async Result.Result<Text, Text> {
+      switch(users.get(caller)) {
+         case(null){
+            return #err("User not found");
+         };
+         case(?user){
+            return #ok("User found");
+         };
+      };
+   };
 
 
 
    public query ({caller}) func getWallet() : async ?Wallet {
       return wallets.get(caller);
    };
+
+   // public query ({caller}) func shareDividen(ticker : Ticker, value : Nat) : async Result.Result<Text, Text> {
+   //    switch(listings.get(ticker)) {
+   //       case(null){
+   //          return #err("Token not listed");
+   //       };
+   //       case(?listing){
+   //          switch(wallets.get(caller)){
+   //             case(null){
+   //                return #err("Wallet not found");
+   //             };
+   //             case(?wallet){
+   //                let callerTokenValue = _getBalance(caller,tin_ticker);
+                  
+   //                if (callerTokenValue <= value) {
+   //                   return #err("Insufficient balance");
+   //                };
+   //                wallets.forEach(func (wallet) {
+   //                   let token = _getTokenDetail(wallet, ticker);
+   //                   switch(token) {
+   //                      case(null){
+   //                         return;
+   //                      };
+   //                      case(?token){
+   //                         let dividen = value * token.value / listing.suplay;
+   //                         _plusSuply(wallet, tin_ticker, dividen);
+   //                      };
+   //                   };
+   //                });
+                  
+   //             };
+   //          };
+            
+   //       };
+   //    };
+   // };
 
    
 };
