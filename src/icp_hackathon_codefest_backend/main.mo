@@ -318,6 +318,10 @@ actor {
       return companies.get(id);
    };
 
+   public query func getAllCompanies() : async [Company] {
+      return Iter.toArray(companies.vals());
+   };
+
    let listings = HashMap.HashMap<Ticker, TokenListing>(0, Text.equal, Text.hash);
 
    public shared ({caller}) func listingToken( ticker : Ticker, suplay : Nat, liquidity : Nat) : (){
