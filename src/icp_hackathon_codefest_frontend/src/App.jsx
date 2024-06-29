@@ -103,7 +103,7 @@ function App() {
 			<br />
 			<br />
 			<form action="#" onSubmit={handleSubmit}>
-				<label htmlFor="name">Company name: &nbsp;</label>
+				<label htmlFor="name">pany name: &nbsp;</label>
 				<input id="name" alt="name" type="text" />
 				<label htmlFor="city">City company: &nbsp;</label>
 				<input id="city" alt="city" type="text" />
