@@ -1,6 +1,7 @@
 import { AuthClient } from "@dfinity/auth-client";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { canisterId, createActor, icp_hackathon_codefest_backend } from "../../../declarations/icp_hackathon_codefest_backend";
+import { canisterId, createActor } from "../../../declarations/icp_hackathon_codefest_backend";
+import { redirect, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -59,18 +60,15 @@ export const useAuthClient = (options = defaultOptions) => {
 		});
 	}, []);
 
-	// localStorage.setItem("isRegistered", false);
-
-	async function login(authClientParam) {
-		const isAuthenticated = await authClientParam.isAuthenticated();
-
-		localStorage.setItem("isAuthenticated", isAuthenticated);
-
-		// updateClient(authClientParam);
-		// const redirectUrl = localStorage.getItem("isRegistered") ? "/company" : "/register";
-		// localStorage.setItem("isRegistered", true);
-		// window.location.href = redirectUrl;
-	}
+	const login = () => {
+		authClient.login({
+			...options.loginOptions,
+			onSuccess: () => {
+				updateClient(authClient);
+				redirect("/register");
+			},
+		});
+	};
 
 	async function updateClient(client) {
 		const isAuthenticated = await client.isAuthenticated();
@@ -96,9 +94,6 @@ export const useAuthClient = (options = defaultOptions) => {
 	async function logout() {
 		await authClient?.logout();
 		await updateClient(authClient);
-
-		localStorage.setItem("session", icp_hackathon_codefest_backend);
-		localStorage.setItem("isRegistered", false);
 	}
 
 	return {

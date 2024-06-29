@@ -1,14 +1,30 @@
 import { useState } from "react";
 import NavLink from "./NavLink";
-import { useAuth } from "../../Hooks/AuthProvider";
 
 const ProfileButton = () => {
 	const [open, isOpen] = useState(false);
-	const { logout } = useAuth();
 
 	const handleOpenMenu = () => {
 		isOpen(!open);
 	};
+
+	async function logoutEvent(event) {
+		event.preventDefault();
+
+		// const authClient = localStorage.getItem("authClient");
+
+		// authClient.logout();
+
+		localStorage.removeItem("session");
+		localStorage.removeItem("authClient");
+		localStorage.removeItem("identity");
+		localStorage.removeItem("principal");
+		localStorage.setItem("isAuthenticated", false);
+		localStorage.setItem("isRegistered", false);
+		setIsAuthenticated(false);
+
+		return false;
+	}
 
 	return (
 		<div className="relative rounded-md bg-indigo-700 py-1.5 px-3 z-10">
@@ -29,7 +45,7 @@ const ProfileButton = () => {
 						<NavLink link="/" text="Home" />
 						<NavLink link="/dashboard" text="Dashboard" />
 						<form>
-							<button type="submit" className="px-6 py-1 text-lg">
+							<button type="submit" className="px-6 py-1 text-lg" onClick={logoutEvent}>
 								Logout
 							</button>
 						</form>

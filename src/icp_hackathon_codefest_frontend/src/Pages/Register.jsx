@@ -6,14 +6,14 @@ import { useState } from "react";
 
 const Register = () => {
 	const [user, setUser] = useState();
-	const session = localStorage.getItem("session");
+	// const session = localStorage.getItem("session");
 
 	function handleSubmit(event) {
 		event.preventDefault();
 		const first_name = event.target.elements.first_name.value;
 		const last_name = event.target.elements.last_name.value;
 		const email = event.target.elements.email.value;
-		session.register({ first_name: first_name, last_name: last_name, email: email }).then((user) => {
+		actor.register({ first_name: first_name, last_name: last_name, email: email }).then((user) => {
 			if (user.err) {
 				setUser(user.err);
 			} else {

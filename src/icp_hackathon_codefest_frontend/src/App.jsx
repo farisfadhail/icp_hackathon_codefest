@@ -10,33 +10,36 @@ import WalletIndex from "./Pages/Wallet/WalletIndex";
 import CompanyCreate from "./Pages/Company/CompanyCreate";
 import ListingCreate from "./Pages/Listing/ListingCreate";
 import TokenSwap from "./Pages/Token/TokenSwap";
+import { AuthProvider } from "./Hooks/AuthProvider";
 
 function App() {
 	return (
-		<div className="App">
-			<Router>
-				<Routes>
-					<Route path="/" element={<Landing />} />
-					<Route path="/register" element={<Register />} />
+		<AuthProvider>
+			<div className="App">
+				<Router>
+					<Routes>
+						<Route path="/" element={<Landing />} />
+						<Route path="/register" element={<Register />} />
 
-					{/* Company Route */}
-					<Route path="/company" element={<CompanyIndex />} />
-					<Route path="/company/:id" element={<CompanyShow />} />
-					<Route path="/company/create" element={<CompanyCreate />} />
-					<Route path="/company/user" element={<CompanyUser />} />
-					<Route path="/company/user/:id" element={<CompanyDetail />} />
+						{/* Company Route */}
+						<Route path="/company" element={<CompanyIndex />} />
+						<Route path="/company/:id" element={<CompanyShow />} />
+						<Route path="/company/create" element={<CompanyCreate />} />
+						<Route path="/company/user" element={<CompanyUser />} />
+						<Route path="/company/user/:id" element={<CompanyDetail />} />
 
-					{/* Listing Route */}
-					<Route path="/listing/create" element={<ListingCreate />} />
+						{/* Listing Route */}
+						<Route path="/listing/create" element={<ListingCreate />} />
 
-					{/* Token Route */}
-					<Route path="/token" element={<TokenIndex />} />
-					<Route path="/token/swap" element={<TokenSwap />} />
+						{/* Token Route */}
+						<Route path="/token" element={<TokenIndex />} />
+						<Route path="/token/swap" element={<TokenSwap />} />
 
-					<Route path="/wallet" element={<WalletIndex />} />
-				</Routes>
-			</Router>
-		</div>
+						<Route path="/wallet" element={<WalletIndex />} />
+					</Routes>
+				</Router>
+			</div>
+		</AuthProvider>
 	);
 }
 
