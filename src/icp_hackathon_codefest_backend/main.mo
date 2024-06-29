@@ -109,7 +109,7 @@ actor {
       };
    };
 
-   func _plsuSuply(id : CoinId, value : Nat) : () {
+   func _plusSuply(id : CoinId, value : Nat) : () {
       switch(coins.get(id)) {
          case (?coin) {
             let coinUpdate : Coin = {
@@ -167,16 +167,19 @@ actor {
             };
             
             companies.put(company_id, company);
-            _plsuSuply(0,2);
+            _plusSuply(0,2);
             company_id +=  1;
             return #ok(company_id - 1);
          };
       };
    };
    
-
    public query func getCompany(id : CompanyId) : async ?Company {
       return companies.get(id);
+   };
+
+   public query func getAllCompanies() : async [Company] {
+      return Iter.toArray(companies.vals());
    };
 
    public query ({caller})  func getWallet() : async ?Wallet {
@@ -215,5 +218,16 @@ actor {
 
    public shared (msg) func whoami() : async Principal {
       msg.caller
+   };
+
+   public query ({caller}) func cekUser() : async Result.Result<Text, Text> {
+      switch(users.get(caller)) {
+         case(null){
+            return #err("User not found");
+         };
+         case(?user){
+            return #ok("User found");
+         };
+      };
    };
 };
