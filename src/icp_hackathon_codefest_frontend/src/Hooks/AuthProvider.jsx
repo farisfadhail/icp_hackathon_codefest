@@ -51,8 +51,6 @@ export const useAuthClient = (options = defaultOptions) => {
 	const [identity, setIdentity] = useState(null);
 	const [principal, setPrincipal] = useState(null);
 	const [whoamiActor, setWhoamiActor] = useState(null);
-	const [session, setSession] = useState(icp_hackathon_codefest_backend);
-	const [isRegistered, setIsRegistered] = useState(false);
 
 	useEffect(() => {
 		// Initialize AuthClient
@@ -61,12 +59,17 @@ export const useAuthClient = (options = defaultOptions) => {
 		});
 	}, []);
 
-	async function login(authClientParam) {
-		updateClient(authClientParam);
+	// localStorage.setItem("isRegistered", false);
 
-		const redirectUrl = isRegistered ? "/company" : "/register";
-		setIsRegistered(true);
-		window.location.href = redirectUrl;
+	async function login(authClientParam) {
+		const isAuthenticated = await authClientParam.isAuthenticated();
+
+		localStorage.setItem("isAuthenticated", isAuthenticated);
+
+		// updateClient(authClientParam);
+		// const redirectUrl = localStorage.getItem("isRegistered") ? "/company" : "/register";
+		// localStorage.setItem("isRegistered", true);
+		// window.location.href = redirectUrl;
 	}
 
 	async function updateClient(client) {
@@ -94,21 +97,14 @@ export const useAuthClient = (options = defaultOptions) => {
 		await authClient?.logout();
 		await updateClient(authClient);
 
-		setSession(icp_hackathon_codefest_backend);
-	}
-
-	async function createSession(backend) {
-		setSession(backend);
+		localStorage.setItem("session", icp_hackathon_codefest_backend);
+		localStorage.setItem("isRegistered", false);
 	}
 
 	return {
 		isAuthenticated,
 		login,
 		logout,
-		createSession,
-		isRegistered,
-		setIsRegistered,
-		session,
 		authClient,
 		identity,
 		principal,

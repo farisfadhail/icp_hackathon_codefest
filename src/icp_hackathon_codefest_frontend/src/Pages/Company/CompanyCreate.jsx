@@ -8,7 +8,7 @@ import { useAuth } from "../../Hooks/AuthProvider";
 
 const CompanyCreate = () => {
 	const [company, setCompany] = useState();
-	const { session } = useAuth();
+	const session = localStorage.getItem("session");
 
 	function registerCompany(event) {
 		event.preventDefault();

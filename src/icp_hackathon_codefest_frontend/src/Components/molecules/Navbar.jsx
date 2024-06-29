@@ -6,31 +6,26 @@ import { useState } from "react";
 import { icp_hackathon_codefest_backend, createActor } from "../../../../declarations/icp_hackathon_codefest_backend";
 import { AuthClient } from "@dfinity/auth-client";
 import { HttpAgent } from "@dfinity/agent";
-import { useAuth } from "../../Hooks/AuthProvider";
 import PrimaryLink from "../atoms/PrimaryLink";
 
 function Navbar() {
-	const { isAuthenticated, logout, login, createSession, isRegistered, setIsRegistered } = useAuth();
+	// const isAuthenticated = localStorage.getItem("isAuthenticated");
 
+	const [isAuthenticated, setIsAuthenticated] = useState("");
 	const [getPrincipal, setPrincipal] = useState("");
 
 	const [actor, setActor] = useState(icp_hackathon_codefest_backend);
 
 	console.log(process.env.CANISTER_ID_INTERNET_IDENTITY);
 	console.log(process.env.CANISTER_ID_ICP_HACKATHON_CODEFEST_BACKEND);
-	console.log("is registered : ", isRegistered);
 
 	async function loginEvent(event) {
 		event.preventDefault();
 		let authClient = await AuthClient.create();
-		await new Promise((resolve, reject) => {
+		await new Promise((resolve) => {
 			authClient.login({
 				identityProvider: process.env.DFX_NETWORK === "ic" ? "https://identity.ic0.app" : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/#authorize`,
-				onSuccess: () => {
-					login(authClient);
-					resolve;
-				},
-				onError: reject,
+				onSuccess: resolve,
 			});
 		});
 		const identity = authClient.getIdentity();
@@ -43,20 +38,39 @@ function Navbar() {
 			})
 		);
 
-		createSession(actor);
-		setIsRegistered(true);
-		// const result = await actor
-		// 	.makeSomeCallLikeHelloWorldOrCRUDOrMintOrSendBtcEtc()
+		localStorage.setItem("session", actor);
+		localStorage.setItem("authClient", authClient);
+		localStorage.setItem("identity", authClient.getIdentity());
+		localStorage.setItem("principal", authClient.getIdentity().getPrincipal());
+		localStorage.setItem("isAuthenticated", authClient.isAuthenticated());
+		setIsAuthenticated(true);
+
+		if (actor.cekUser()) {
+			window.location.href = "/company";
+		} else {
+			window.location.href = "/register";
+		}
+
+		// const result = await actor.makeSomeCallLikeHelloWorldOrCRUDOrMintOrSendBtcEtc()
 		// 	// Update the ui accordingly...
 		// 	.updateUi(result);
-
 		return false;
 	}
 
 	async function logoutEvent(event) {
 		event.preventDefault();
 
-		logout();
+		// const authClient = localStorage.getItem("authClient");
+
+		// authClient.logout();
+
+		localStorage.removeItem("session");
+		localStorage.removeItem("authClient");
+		localStorage.removeItem("identity");
+		localStorage.removeItem("principal");
+		localStorage.setItem("isAuthenticated", false);
+		localStorage.setItem("isRegistered", false);
+		setIsAuthenticated(false);
 
 		return false;
 	}
@@ -65,10 +79,10 @@ function Navbar() {
 
 	async function whoAmI(event) {
 		event.preventDefault();
-		const principal = await actor.whoami();
+		const actor = localStorage.getItem("session");
 
-		setPrincipal(principal.toString());
-		console.log("from principal :", principal.toString());
+		setPrincipal(localStorage.getItem("principal"));
+		console.log("from principal :", localStorage.getItem("principal"));
 		console.log(actor);
 		return false;
 	}
@@ -88,19 +102,19 @@ function Navbar() {
 				{/* <SecondaryLink link="/register" text="REGISTER" /> */}
 				{isAuthenticated ? (
 					<>
-						{/* <h2>user : {getPrincipal}</h2>
+						<h2>user : {getPrincipal}</h2>
 						<form>
-							<PrimaryButton type="submit" text="GET PRINCIPAL" onClick={whoAmI} />
-						</form> */}
+							<PrimaryButton text="GET PRINCIPAL" onClick={whoAmI} />
+						</form>
 						<form>
-							<PrimaryButton type="submit" text="LOGOUT" onClick={logoutEvent} />
+							<PrimaryButton text="LOGOUT" onClick={logoutEvent} />
 						</form>
 						<PrimaryLink link="/company" text="Dashboard" />
 					</>
 				) : (
 					<>
 						<form>
-							<PrimaryButton type="submit" text="LOGIN" onClick={loginEvent} />
+							<PrimaryButton text="LOGIN" onClick={loginEvent} />
 						</form>
 					</>
 				)}

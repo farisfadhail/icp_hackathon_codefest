@@ -3,11 +3,10 @@ import PrimaryButton from "../Components/atoms/PrimaryButton";
 import SecondaryLink from "../Components/atoms/SecondaryLink";
 import InputText from "../Components/atoms/InputText";
 import { useState } from "react";
-import { useAuth } from "../Hooks/AuthProvider";
 
 const Register = () => {
 	const [user, setUser] = useState();
-	const { session } = useAuth();
+	const session = localStorage.getItem("session");
 
 	function handleSubmit(event) {
 		event.preventDefault();

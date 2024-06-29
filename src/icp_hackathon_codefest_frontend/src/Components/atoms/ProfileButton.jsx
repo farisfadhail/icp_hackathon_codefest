@@ -10,14 +10,6 @@ const ProfileButton = () => {
 		isOpen(!open);
 	};
 
-	async function logoutEvent(event) {
-		event.preventDefault();
-
-		logout();
-
-		return false;
-	}
-
 	return (
 		<div className="relative rounded-md bg-indigo-700 py-1.5 px-3 z-10">
 			<button type="button" onClick={handleOpenMenu} className="flex items-center hover:text-gold-700 text-white">
@@ -37,7 +29,7 @@ const ProfileButton = () => {
 						<NavLink link="/" text="Home" />
 						<NavLink link="/dashboard" text="Dashboard" />
 						<form>
-							<button type="submit" className="px-6 py-1 text-lg" onClick={logoutEvent}>
+							<button type="submit" className="px-6 py-1 text-lg">
 								Logout
 							</button>
 						</form>
