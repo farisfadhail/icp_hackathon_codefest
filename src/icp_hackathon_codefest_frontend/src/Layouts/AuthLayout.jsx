@@ -1,14 +1,14 @@
 import Sidebar from "../Components/molecules/Sidebar";
 import AuthNavbar from "../Components/molecules/AuthNavbar";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Hooks/AuthProvider";
 
 const AuthLayout = ({ children }) => {
-	// const isAuthenticated = localStorage.getItem("isAuthenticated");
 	const { isAuthenticated } = useAuth();
+	const navigate = useNavigate();
 
 	if (isAuthenticated == false) {
-		return (window.location.href = "/");
+		return navigate("/");
 	}
 
 	return (

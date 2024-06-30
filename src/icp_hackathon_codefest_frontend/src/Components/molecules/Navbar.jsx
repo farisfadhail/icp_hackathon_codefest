@@ -6,14 +6,15 @@ import { useAuth } from "../../Hooks/AuthProvider";
 import { useState } from "react";
 
 function Navbar() {
-	const { isAuthenticated, login, logout, whoamiActor } = useAuth();
+	const { isAuthenticated, login, logout, actor, whoAmI } = useAuth();
 
 	const [result, setResult] = useState("");
 
-	const whoAmI = async () => {
-		const whoami = await whoamiActor.whoami();
-		setResult(whoami);
-	};
+	setResult(whoAmI);
+	// const whoAmI = async () => {
+	// 	const whoami = await actor.whoami();
+	// 	setResult(whoami);
+	// };
 
 	return (
 		<nav className="h-24 px-12 flex items-center justify-between">
@@ -32,7 +33,7 @@ function Navbar() {
 					<>
 						<h2>user : {result}</h2>
 						<PrimaryButton text="GET PRINCIPAL" onClick={whoAmI} />
-						<PrimaryButton text="LOGOUT" onClick={logout} />
+						{/* <PrimaryButton text="LOGOUT" onClick={logout} /> */}
 						<PrimaryLink link="/company" text="Dashboard" />
 					</>
 				) : (

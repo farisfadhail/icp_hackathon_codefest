@@ -3,24 +3,31 @@ import PrimaryButton from "../Components/atoms/PrimaryButton";
 import SecondaryLink from "../Components/atoms/SecondaryLink";
 import InputText from "../Components/atoms/InputText";
 import { useState } from "react";
+import { useAuth } from "../Hooks/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
 	const [user, setUser] = useState();
-	// const session = localStorage.getItem("session");
+	const { authClient, register } = useAuth();
+	const navigate = useNavigate();
 
 	function handleSubmit(event) {
 		event.preventDefault();
 		const first_name = event.target.elements.first_name.value;
 		const last_name = event.target.elements.last_name.value;
 		const email = event.target.elements.email.value;
-		actor.register({ first_name: first_name, last_name: last_name, email: email }).then((user) => {
-			if (user.err) {
-				setUser(user.err);
-			} else {
-				setUser("User registered successfully!");
-				window.location.href = "/company";
-			}
-		});
+		// authClient.register({ first_name: first_name, last_name: last_name, email: email }).then((user) => {
+		// 	if (user.err) {
+		// 		setUser(user.err);
+		// 	} else {
+		// 		setUser("User registered successfully!");
+		// 		navigate("/company");
+		// 	}
+		// });
+
+		const result = register(first_name, last_name, email);
+
+		console.log(result);
 
 		return false;
 	}
@@ -30,7 +37,7 @@ const Register = () => {
 			<div class="blob"></div>
 			<div class="blob-2"></div>
 			<div className="p-6 rounded-md bg-indigo-900 bg-opacity-60 border-2 border-indigo-700 space-y-6 w-96">
-				<SecondaryLink link="/" text="Back" />
+				<SecondaryLink link="/company" text="Back" />
 				<div className="w-fit mx-auto">
 					<AppLogo />
 				</div>

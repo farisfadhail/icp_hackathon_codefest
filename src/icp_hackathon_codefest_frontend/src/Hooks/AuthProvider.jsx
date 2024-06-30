@@ -1,7 +1,6 @@
 import { AuthClient } from "@dfinity/auth-client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { canisterId, createActor } from "../../../declarations/icp_hackathon_codefest_backend";
-import { redirect, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -51,7 +50,7 @@ export const useAuthClient = (options = defaultOptions) => {
 	const [authClient, setAuthClient] = useState(null);
 	const [identity, setIdentity] = useState(null);
 	const [principal, setPrincipal] = useState(null);
-	const [whoamiActor, setWhoamiActor] = useState(null);
+	const [actor, setActor] = useState(null);
 
 	useEffect(() => {
 		// Initialize AuthClient
@@ -65,7 +64,6 @@ export const useAuthClient = (options = defaultOptions) => {
 			...options.loginOptions,
 			onSuccess: () => {
 				updateClient(authClient);
-				redirect("/register");
 			},
 		});
 	};
@@ -88,8 +86,32 @@ export const useAuthClient = (options = defaultOptions) => {
 			},
 		});
 
-		setWhoamiActor(actor);
+		setActor(actor);
 	}
+
+	async function register(first_name, last_name, email) {
+		const actorRegis = createActor(canisterId, {
+			agentOptions: identity,
+		});
+
+		actorRegis.register({ first_name: first_name, last_name: last_name, email: email }).then((user) => {
+			if (user.err) {
+				return user.err;
+			} else {
+				// return redirect("/company");
+				return "User registered successfully!";
+			}
+		});
+	}
+
+	// async function whoAmI() {
+	// 	const actorWAI = createActor(canisterId, {
+	// 		agentOptions: identity,
+	// 	});
+
+	// 	// actorWAI.whoami()
+	// 	return actorWAI;
+	// }
 
 	async function logout() {
 		await authClient?.logout();
@@ -103,7 +125,9 @@ export const useAuthClient = (options = defaultOptions) => {
 		authClient,
 		identity,
 		principal,
-		whoamiActor,
+		actor,
+		register,
+		// whoAmI,
 	};
 };
 
