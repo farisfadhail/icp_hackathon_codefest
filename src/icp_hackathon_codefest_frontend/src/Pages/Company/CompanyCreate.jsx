@@ -5,10 +5,12 @@ import PrimaryButton from "../../Components/atoms/PrimaryButton";
 import Title from "../../Components/atoms/Title";
 import { icp_hackathon_codefest_backend } from "../../../../declarations/icp_hackathon_codefest_backend";
 import { useAuth } from "../../Hooks/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const CompanyCreate = () => {
 	const [company, setCompany] = useState();
-	const session = localStorage.getItem("session");
+	const { createCompany } = useAuth();
+	const navigate = useNavigate();
 
 	function registerCompany(event) {
 		event.preventDefault();
@@ -19,14 +21,16 @@ const CompanyCreate = () => {
 		const token_name = event.target.elements.token_name.value;
 		const token_symbol = event.target.elements.token_symbol.value;
 		const token_supply = event.target.elements.token_supply.value;
-		session.createCompany({ name: name, city: city, nation: nation, description: description, name: token_name, ticker: token_symbol, suply: token_supply }).then((company) => {
-			if (company.err) {
-				setCompany(company.err);
-			} else {
-				setCompany("Company registered successfully!");
-			}
-		});
+
+		const result = createCompany(name, city, nation, description, token_name, token_symbol, token_supply);
+
+		setCompany(result);
+
 		return false;
+	}
+
+	if (company != null) {
+		navigate("/company");
 	}
 
 	return (
