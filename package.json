@@ -14,5 +14,9 @@
   "type": "module",
   "workspaces": [
     "src/icp_hackathon_codefest_frontend"
-  ]
+  ],
+  "dependencies": {
+    "@dfinity/agent": "^1.4.0",
+    "@dfinity/auth-client": "^1.4.0"
+  }
 }

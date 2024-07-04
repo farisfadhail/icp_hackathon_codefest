@@ -40,15 +40,38 @@ module {
         name : Text;
         city : Text;
         nation : Text;
-        value : Nat;
         description : Text;
+    };
+
+    
+
+    public type Ticker = Text;
+    public type Token = {
+        name : Text;
+        ticker : Ticker;
+        suply : Nat;
+    };
+
+    public type TokenListing = {
+        ticker : Ticker;
+        creator : Principal;
+        suplay : Nat;
+        liquidity : Nat;
     };
 
     public type Company = {
         id : Nat64;
         created : Time.Time;
         creator : Principal;
-        holder : [Holder];
         detail : CompanyDetail;
+        token : Token; 
+    };
+
+    public type TokenDetail = {
+        ticker : Ticker;
+        value : Nat;
+    };
+    public type Wallet = {
+        detail : [TokenDetail];
     };
 }
