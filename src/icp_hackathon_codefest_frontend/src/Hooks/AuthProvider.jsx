@@ -97,10 +97,10 @@ export const useAuthClient = (options = defaultOptions) => {
 		return regist;
 	}
 
-	function createCompany(name, city, nation, value, description) {
+	function createCompany(name, city, nation, description, token_name, token_symbol, token_supply) {
 		const actorCompany = createActor(canisterId);
 
-		const comp = actorCompany.createCompany({ name, city, nation, value, description });
+		const comp = actorCompany.createCompany({ name, city, nation, description }, { token_name, token_symbol, token_supply });
 
 		return comp;
 	}

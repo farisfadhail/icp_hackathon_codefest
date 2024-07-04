@@ -33,6 +33,8 @@ const CompanyCreate = () => {
 		navigate("/company");
 	}
 
+	console.log("return company :", company);
+
 	return (
 		<AuthLayout>
 			<article className="min-h-screen">
