@@ -6,11 +6,11 @@ import { useAuth } from "../../Hooks/AuthProvider";
 import { useState } from "react";
 
 function Navbar() {
-	const { isAuthenticated, login, logout, actor, whoAmI } = useAuth();
+	const { isAuthenticated, login, logout, actor } = useAuth();
 
 	const [result, setResult] = useState("");
 
-	setResult(whoAmI);
+	// setResult(whoAmI);
 	// const whoAmI = async () => {
 	// 	const whoami = await actor.whoami();
 	// 	setResult(whoami);
@@ -31,8 +31,8 @@ function Navbar() {
 				{/* <SecondaryLink link="/register" text="REGISTER" /> */}
 				{isAuthenticated ? (
 					<>
-						<h2>user : {result}</h2>
-						<PrimaryButton text="GET PRINCIPAL" onClick={whoAmI} />
+						{/* <h2>user : {result}</h2>
+						<PrimaryButton text="GET PRINCIPAL" onClick={whoAmI} /> */}
 						{/* <PrimaryButton text="LOGOUT" onClick={logout} /> */}
 						<PrimaryLink link="/company" text="Dashboard" />
 					</>

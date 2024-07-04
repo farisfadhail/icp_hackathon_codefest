@@ -89,29 +89,21 @@ export const useAuthClient = (options = defaultOptions) => {
 		setActor(actor);
 	}
 
-	async function register(first_name, last_name, email) {
-		const actorRegis = createActor(canisterId, {
-			agentOptions: identity,
-		});
+	function register(first_name, last_name, email) {
+		const actorRegis = createActor(canisterId);
 
-		actorRegis.register({ first_name: first_name, last_name: last_name, email: email }).then((user) => {
-			if (user.err) {
-				return user.err;
-			} else {
-				// return redirect("/company");
-				return "User registered successfully!";
-			}
-		});
+		const regist = actorRegis.register({ first_name, last_name, email });
+
+		return regist;
 	}
 
-	// async function whoAmI() {
-	// 	const actorWAI = createActor(canisterId, {
-	// 		agentOptions: identity,
-	// 	});
+	function createCompany(name, city, nation, value, description) {
+		const actorCompany = createActor(canisterId);
 
-	// 	// actorWAI.whoami()
-	// 	return actorWAI;
-	// }
+		const comp = actorCompany.createCompany({ name, city, nation, value, description });
+
+		return comp;
+	}
 
 	async function logout() {
 		await authClient?.logout();
@@ -127,7 +119,7 @@ export const useAuthClient = (options = defaultOptions) => {
 		principal,
 		actor,
 		register,
-		// whoAmI,
+		createCompany,
 	};
 };
 

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const Register = () => {
 	const [user, setUser] = useState();
-	const { authClient, register } = useAuth();
+	const { register } = useAuth();
 	const navigate = useNavigate();
 
 	function handleSubmit(event) {
@@ -16,21 +16,19 @@ const Register = () => {
 		const first_name = event.target.elements.first_name.value;
 		const last_name = event.target.elements.last_name.value;
 		const email = event.target.elements.email.value;
-		// authClient.register({ first_name: first_name, last_name: last_name, email: email }).then((user) => {
-		// 	if (user.err) {
-		// 		setUser(user.err);
-		// 	} else {
-		// 		setUser("User registered successfully!");
-		// 		navigate("/company");
-		// 	}
-		// });
 
 		const result = register(first_name, last_name, email);
 
-		console.log(result);
+		setUser(result);
 
 		return false;
 	}
+
+	if (user != null) {
+		navigate("/company");
+	}
+
+	console.log("return register : ", user);
 
 	return (
 		<section className="w-screen min-h-screen flex justify-center items-center">

@@ -27,7 +27,7 @@ const ProfileButton = () => {
 				<div className="bg-indigo-700 p-4 absolute right-0 rounded-b-md rounded-tl-md">
 					<ul className="space-y-4 text-white">
 						<NavLink link="/" text="Home" />
-						<NavLink link="/register" text="Profile" />
+						<NavLink link="/register" text="Register" />
 						{/* <NavLink link="/dashboard" text="Dashboard" /> */}
 						<button className="px-6 py-1 text-lg" onClick={logout}>
 							Logout
